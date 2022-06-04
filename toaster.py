@@ -1,84 +1,30 @@
-# C:/Windows/py.exe
-# Creates a random notification to remind me to look outside
+"""Runs the toast passed in by name, as specified in `toasts.json`."""
 
 from argparse import ArgumentParser
-from random import randrange
-from types import FunctionType
-from typing import List
+from json import load
+from random import choice
 
-from win10toast import ToastNotifier
-
-
-class Toast:
-    def end_day() -> None:
-        """Toast a reminder of things to do at the end of the day"""
-        toast(
-            title="End of day reminder",
-            msg="Fill out timesheet, comment today's work on Jira."
-        )
-
-
-    def eye_saver() -> None:
-        """Toast a reminder to look outside"""
-        toast(
-            title=random_item(
-                [
-                    "Save your eyes",
-                    "Look outside",
-                    "Touch grass",
-                    "Eye strain reduction",
-                    "Eye saver"
-                    ]
-                ),
-            msg=random_item(
-                [
-                    "20-20-20",
-                    "Every 20 minutes look at something 20 feet away for 20 seconds",
-                    "Touch grass",
-                    "Let's try to avoid needing glasses",
-                    "Look outside",
-                    "Eye suggest you look outside",
-                    "Eye suggest you avoid eye strain",
-                    "I care about eye care"
-                    ]
-                )
-            )
+from plyer import notification
 
 
 def main() -> None:
-    """Parse arguments, call toaster"""
-    functions = [
-        *filter(
-            lambda attr: isinstance(vars(Toast)[attr], FunctionType),
-            vars(Toast)
-            )
-        ]
-    
+    """Parse arguments and show correct toast"""
+    with open("toasts.json", "r") as toast_file:
+        toasts: dict = load(toast_file)
+
     parser = ArgumentParser()
     parser.add_argument(
-        "-t",
-        choices=functions,
-        help="Type of toast to send",
-        required=True,
+        "toast",
+        choices=toasts.keys(),
+        help="Toast configuration to send",
         type=str
-        )
-    
-    exec(f"Toast.{vars(parser.parse_args())['t']}()")
+    )
 
+    config = toasts[parser.parse_args().toast]
 
-def random_item(arr: List[str]) -> str:
-    """Choose random string from list"""
-    return arr[randrange(len(arr))]
-
-
-def toast(title: str, msg: str) -> None:
-    """Show toast with string and title"""
-    ToastNotifier().show_toast(
-        title=title,
-        msg=msg,
-        icon_path=None,
-        duration=5,
-        threaded=False
+    notification.notify(
+        title=choice(config['title']),
+        message=choice(config['message'])
     )
 
 

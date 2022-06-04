@@ -1,0 +1,29 @@
+{
+	"end_work_day": {
+		"title": [
+			"End of day reminder"
+		],
+		"message": [
+			"Fill out timesheet, comment today's work on Jira."
+		]
+	},
+	"eye_saver": {
+		"title": [
+			"Save your eyes",
+			"Look outside",
+			"Touch grass",
+			"Eye strain reduction",
+			"Eye saver"
+		],
+		"message": [
+			"20-20-20",
+			"Every 20 minutes look at something 20 feet away for 20 seconds",
+			"Touch grass",
+			"Let's try to avoid needing glasses",
+			"Look outside",
+			"Eye suggest you look outside",
+			"Eye suggest you avoid eye strain",
+			"I care about eye care"
+		]
+	}
+}
